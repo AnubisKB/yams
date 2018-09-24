@@ -26,15 +26,15 @@ func DeleteMessage(messageID string) {
 	data.DeleteMessage(messageID)
 }
 
-func parseAndValidatePayload(payload map[string]interface{}) (string, []interface{}, string, string) {
+func parseAndValidatePayload(payload map[string]interface{}) (string, []string, string, string) {
 	from := payload["from"].(string)
-	toList := payload["to"].([]interface{})
+	toList := payload["to"].([]string)
 	subject := payload["subject"].(string)
 	body := payload["body"].(string)
 
 	validateAddress(from)
 	for _, to := range toList {
-		validateAddress(to.(string))
+		validateAddress(to)
 	}
 	validateContent(subject)
 	validateContent(body)

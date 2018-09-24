@@ -1,8 +1,10 @@
 package app
 
 import (
+	"strconv"
 	"testing"
 
+	"dakstudios.net/yams/src/data"
 	"dakstudios.net/yams/src/dto"
 	"github.com/stretchr/testify/assert"
 )
@@ -57,18 +59,24 @@ func TestGetMessageSerializable(t *testing.T) {
 }
 
 func TestCreateMessageSerializable(t *testing.T) {
-	// var payload map[string]interface{}
-	// payload["From"] = "kburns"
-	// payload["To"] = "kburns,tearle,kstalzer"
-	// payload["Subject"] = "TestCreateMessageSerializable Subject"
-	// payload["Body"] = "TestCreateMessageSerializable Body"
+	var payload = make(map[string]interface{})
 
-	// newMessage := CreateMessageSerializable(payload)
-	// checkMessage := data.GetMessage(string(newMessage.ID))
-	// data.DeleteMessage(string(newMessage.ID))
-	// assert.EqualValues(t, newMessage, checkMessage)
+	payload["from"] = "kburns"
+	payload["to"] = []string{"kburns", "kstalzer", "tearle"}
+	payload["subject"] = "TestCreateMessageSerializable Subject"
+	payload["body"] = "TestCreateMessageSerializable Body"
+
+	newMessage := CreateMessageSerializable(payload)
+	nid := strconv.FormatInt(newMessage.ID, 10)
+	checkMessage := data.GetMessage(nid)
+	data.DeleteMessage(nid)
+	assert.EqualValues(t, newMessage, checkMessage)
 }
 
 func TestDeleteMessage(t *testing.T) {
-
+	newMessage := data.CreateMessage("kburns", []string{"larry", "tearle"}, "TestDeleteMessage", "TestDeleteMessage")
+	nid := strconv.FormatInt(newMessage.ID, 10)
+	DeleteMessage(nid)
+	checkMessage := data.GetMessage(nid)
+	assert.Equal(t, checkMessage.ID, int64(0))
 }

@@ -34,6 +34,7 @@ func connect(query string) *sql.DB {
 }
 
 func selectQuery(db *sql.DB, query string) *sql.Rows {
+	log.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
 		panic(err)
@@ -72,10 +73,10 @@ func getAddressInfo(addresList []string) map[string]int64 {
 }
 
 // CreateMessage ...
-func CreateMessage(from string, iToList []interface{}, subject string, body string) dto.Message {
+func CreateMessage(from string, iToList []string, subject string, body string) dto.Message {
 	toList := []string{}
 	for _, to := range iToList {
-		toList = append(toList, to.(string))
+		toList = append(toList, to)
 	}
 
 	addrInfo := getAddressInfo(append(toList, from))
