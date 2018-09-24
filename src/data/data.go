@@ -22,22 +22,21 @@ func connect(query string) *sql.DB {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable", host, port, user, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	err = db.Ping()
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	return db
 }
 
 func selectQuery(db *sql.DB, query string) *sql.Rows {
-	log.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	return rows
@@ -61,7 +60,7 @@ func getAddressInfo(addresList []string) map[string]int64 {
 	for rows.Next() {
 		err := rows.Scan(&id, &addr)
 		if err != nil {
-			log.Fatal(err)
+			log.Panicln(err)
 		}
 		addrInfo[addr] = id
 	}
@@ -73,12 +72,7 @@ func getAddressInfo(addresList []string) map[string]int64 {
 }
 
 // CreateMessage ...
-func CreateMessage(from string, iToList []string, subject string, body string) dto.Message {
-	toList := []string{}
-	for _, to := range iToList {
-		toList = append(toList, to)
-	}
-
+func CreateMessage(from string, toList []string, subject string, body string) dto.Message {
 	addrInfo := getAddressInfo(append(toList, from))
 
 	query := fmt.Sprintf("INSERT INTO message (from_address, subject, body) VALUES (%d, '%s', '%s') RETURNING message_id", addrInfo[from], subject, body)
@@ -86,13 +80,13 @@ func CreateMessage(from string, iToList []string, subject string, body string) d
 
 	tx, err := db.Begin()
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	stmt, err := tx.Prepare(query)
 	if err != nil {
 		tx.Rollback()
-		panic(err)
+		log.Panicln(err)
 	}
 	defer stmt.Close()
 	rs := stmt.QueryRow()
@@ -100,14 +94,14 @@ func CreateMessage(from string, iToList []string, subject string, body string) d
 	err = rs.Scan(&messageID)
 	if err != nil {
 		tx.Rollback()
-		panic(err)
+		log.Panicln(err)
 	}
 
 	if len(toList) == 0 {
 		err = errors.New("No valid recipient(s)")
 	}
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	for _, to := range toList {
@@ -115,13 +109,13 @@ func CreateMessage(from string, iToList []string, subject string, body string) d
 		stmt, err := tx.Prepare(query)
 		if err != nil {
 			tx.Rollback()
-			panic(err)
+			log.Panicln(err)
 		}
 		defer stmt.Close()
 		_, err = stmt.Exec()
 		if err != nil {
 			tx.Rollback()
-			panic(err)
+			log.Panicln(err)
 		}
 	}
 
@@ -166,7 +160,7 @@ func GetAllMessages() []dto.Message {
 	for allMessageRows.Next() {
 		err := allMessageRows.Scan(&id, &from, &to, &subject, &body)
 		if err != nil {
-			log.Fatal(err)
+			log.Panicln(err)
 		}
 
 		if previd == 0 {
@@ -226,7 +220,7 @@ func GetMessage(messageID string) dto.Message {
 	for allMessageRows.Next() {
 		err := allMessageRows.Scan(&id, &from, &to, &subject, &body)
 		if err != nil {
-			log.Fatal(err)
+			log.Panicln(err)
 		}
 		toList = append(toList, to)
 	}
@@ -253,31 +247,31 @@ func DeleteMessage(messageID string) {
 
 	tx, err := db.Begin()
 	if err != nil {
-		panic(err)
+		log.Panicln(err)
 	}
 
 	stmt, err := tx.Prepare(queryTo)
 	if err != nil {
 		tx.Rollback()
-		panic(err)
+		log.Panicln(err)
 	}
 	defer stmt.Close()
 	_, err = stmt.Exec()
 	if err != nil {
 		tx.Rollback()
-		panic(err)
+		log.Panicln(err)
 	}
 
 	stmt, err = tx.Prepare(queryMsg)
 	if err != nil {
 		tx.Rollback()
-		panic(err)
+		log.Panicln(err)
 	}
 	defer stmt.Close()
 	_, err = stmt.Exec()
 	if err != nil {
 		tx.Rollback()
-		panic(err)
+		log.Panicln(err)
 	}
 
 	tx.Commit()

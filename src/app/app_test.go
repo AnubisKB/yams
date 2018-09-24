@@ -62,7 +62,7 @@ func TestCreateMessageSerializable(t *testing.T) {
 	var payload = make(map[string]interface{})
 
 	payload["from"] = "kburns"
-	payload["to"] = []string{"kburns", "kstalzer", "tearle"}
+	payload["to"] = []interface{}{"kburns", "kstalzer", "tearle"}
 	payload["subject"] = "TestCreateMessageSerializable Subject"
 	payload["body"] = "TestCreateMessageSerializable Body"
 

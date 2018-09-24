@@ -1,6 +1,8 @@
 package app
 
 import (
+	"log"
+
 	"dakstudios.net/yams/src/data"
 	"dakstudios.net/yams/src/dto"
 )
@@ -18,7 +20,9 @@ func GetMessageSerializable(messageID string) dto.Message {
 // CreateMessageSerializable ...
 func CreateMessageSerializable(payload map[string]interface{}) dto.Message {
 	from, toList, subject, body := parseAndValidatePayload(payload)
-	return data.CreateMessage(from, toList, subject, body)
+	msg := data.CreateMessage(from, toList, subject, body)
+	log.Println(msg)
+	return msg
 }
 
 // DeleteMessage ...
@@ -28,15 +32,18 @@ func DeleteMessage(messageID string) {
 
 func parseAndValidatePayload(payload map[string]interface{}) (string, []string, string, string) {
 	from := payload["from"].(string)
-	toList := payload["to"].([]string)
-	subject := payload["subject"].(string)
-	body := payload["body"].(string)
-
 	validateAddress(from)
-	for _, to := range toList {
-		validateAddress(to)
+
+	toList := []string{}
+	for _, to := range payload["to"].([]interface{}) {
+		validateAddress(to.(string))
+		toList = append(toList, to.(string))
 	}
+
+	subject := payload["subject"].(string)
 	validateContent(subject)
+
+	body := payload["body"].(string)
 	validateContent(body)
 
 	return from, toList, subject, body
