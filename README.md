@@ -36,6 +36,8 @@ Install:
  - go get -u github.com/lib/pq
  - cukes/bundle
  - run the sql scripts in the db directory in the postgres.public schema
+    - create_db_objects.sql
+    - test_setup.sql
 
 Run:
  - Unit tests (from /src):                              
