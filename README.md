@@ -9,7 +9,7 @@ Goals:
 
 Points of Note:
  - This solution is intended to demonstrate a 'Minimally Viable Product'
-    - This is the kind of base that an Agile iteratative development cycle supports: Drive everything by demonstarble Business Value every sprint
+    - This is the kind of base that an Agile iteratative development cycle supports: Drive everything by demonstrable Business Value every sprint
     - Initial address data expected; no methods to manage user addresses
     - No database mocking (as normally should be) for speed of development; initial test data resides in the database for unit/acceptance tests
     - Data tables do not contain the usual audit trail fields (not defined as part of the MVP)
