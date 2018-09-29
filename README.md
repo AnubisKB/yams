@@ -51,7 +51,7 @@ Usage:
  - Create a message: POST <host:port>/yams/ (with payload: 
         {
             "from":"<address:required>", 
-            "to":["<address:required>,<address>..."], 
+            "to":["<address:required>","<address>..."], 
             "subject":"<subject>",
             "body":"<body>"
         }
