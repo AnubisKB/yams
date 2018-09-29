@@ -52,7 +52,7 @@ Usage:
         {
             "from":"<address:required>", 
             "to":["<address:required>,<address>..."], 
-            "subject":"<subject:required>",
+            "subject":"<subject>",
             "body":"<body>"
         }
    )
