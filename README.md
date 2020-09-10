@@ -1,11 +1,12 @@
 YAMS - Yet Another Messaging Service
 
 Goals:
- - Meet the expectations of the exercise using Go
- - Demonstrate the High-Confidence/Low-Risk value using proper ATDD/TDD techniques 
-    - Demonstrate the use of executable Acceptance Tests to drive system behavioral test driving/coverage (Business Motivated)
-    - Demonstrate the use of Unit Tests to drive development of quality and testable design (Engineering Motivated)
-
+ - Demonstrate various development compantancies
+    - REST-based API methods
+    - High-Confidence/Low-Risk value using proper ATDD/TDD techniques 
+        - Use of executable Acceptance Tests to drive system behavioral test driving/coverage (Business Motivated)
+        - Use of Unit Tests to drive development of quality and testable design (Engineering Motivated)
+        
 
 Points of Note:
  - This solution is intended to demonstrate a 'Minimally Viable Product'
@@ -23,11 +24,11 @@ Points of Note:
 
 
 Dependencies:
- - PostgreSql (9.6 was used)
- - Ruby (2.3.3 was used)
+ - PostgreSql (9.6 used)
+ - Ruby (2.3.3 used)
  - ruby gem 'Bundler'
  - the ability to compile the ruby gem 'PG' natively
- - go (1.10 was used)
+ - go (1.10 used)
  
 
 Install: 
@@ -48,14 +49,13 @@ Run:
     - rake
 
 Usage:
- - Create a message: POST <host:port>/yams/ (with payload: 
-        {
-            "from":"<address:required>", 
-            "to":["<address:required>","<address>..."], 
-            "subject":"<subject>",
-            "body":"<body>"
-        }
-   )
+ - Create a message: POST <host:port>/yams/ (with payload): 
+   {
+       "from":"<address:required>", 
+       "to":["<address:required>","<address>..."], 
+       "subject":"<subject>",
+       "body":"<body>"
+   }
  - Retrieve all messages: GET <host:port>/yams
  - Retrieve a specific message: GET <host:port>/yams/:message_id
  - Delete a specific message: DELETE <host:port>/yams/:message_id
